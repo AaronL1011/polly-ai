@@ -1,6 +1,12 @@
-# Polly Pipeline
+# Polly AI
 
-Political data ingestion engine — file-based RAG on political data (bills, Hansard, members) with a non-partisan query portal. See [SPEC.md](SPEC.md) for the full spec.
+Polly AI is a political, social and government data ingestion engine that provides file-based RAG with a non-partisan, simple and accessible research portal.
+
+![polly-landing-page](https://github.com/user-attachments/assets/3a456ee2-55cf-4ef8-ad6f-fb61a606132c)
+![polly-query-result-page](https://github.com/user-attachments/assets/7a8f039e-f9a3-4425-b642-f1607e0d5c1e)
+
+
+See [SPEC.md](SPEC.md) for the full spec.
 
 **Documentation:** [SPEC.md](SPEC.md) (product spec) · [docs/](docs/) — [Architecture](docs/ARCHITECTURE.md), [Schemas](docs/SCHEMAS.md), [Data models](docs/DATA_MODELS.md), [Implementation](docs/IMPLEMENTATION.md), [Cost model](docs/COST_MODEL.md)
 
