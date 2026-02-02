@@ -28,6 +28,7 @@ class JobStatus(str, Enum):
 class DocumentMetadata:
     document_type: DocumentType
     source: str
+    source_url: str | None = None
     date: str | None = None
     title: str | None = None
     description: str | None = None

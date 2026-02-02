@@ -50,12 +50,20 @@ class QueryMetadataData(BaseModel):
     model: str
 
 
+class SourceReferenceData(BaseModel):
+    document_id: str
+    source_name: str
+    source_url: str | None = None
+    source_date: str | None = None
+
+
 class QueryResponse(BaseModel):
     layout: LayoutData
     components: list[ComponentData]
     cost: CostBreakdownData
     cached: bool
     metadata: QueryMetadataData
+    sources: list[SourceReferenceData]
 
 
 @router.post("/query", response_model=QueryResponse)
@@ -123,12 +131,23 @@ async def query(
         model=result.result.metadata.model,
     )
 
+    sources_data = [
+        SourceReferenceData(
+            document_id=s.document_id,
+            source_name=s.source_name,
+            source_url=s.source_url,
+            source_date=s.source_date,
+        )
+        for s in result.result.sources
+    ]
+
     return QueryResponse(
         layout=layout_data,
         components=components_data,
         cost=cost_data,
         cached=result.result.cached,
         metadata=metadata_data,
+        sources=sources_data,
     )
 
 

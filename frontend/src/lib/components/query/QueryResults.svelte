@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { queryStore, layout, components } from '$lib/stores/query';
+  import { queryStore, layout, components, sources } from '$lib/stores/query';
   import Dashboard from '$lib/components/layout/Dashboard.svelte';
 </script>
 
@@ -38,7 +38,7 @@
   </div>
 {:else if $layout && $components.length > 0}
   <div class="results-container">
-    <Dashboard layout={$layout} components={$components} />
+    <Dashboard layout={$layout} components={$components} sources={$sources} />
     
     {#if $queryStore.response}
       <div class="metadata">

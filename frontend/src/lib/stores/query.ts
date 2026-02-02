@@ -72,4 +72,8 @@ export const layout = derived(queryStore, ($store) => {
   return $store.response?.layout ?? null;
 });
 
+export const sources = derived(queryStore, ($store) => {
+  return $store.response?.sources ?? [];
+});
+
 export const hasSubmitted = derived(queryStore, ($store) => $store.hasSubmitted);

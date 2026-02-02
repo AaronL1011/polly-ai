@@ -242,6 +242,7 @@ class RAGResult:
     layout: Layout
     components: list[Component]
     metadata: QueryMetadata
+    sources: list[SourceReference] = field(default_factory=list)
     cached: bool = False
     cost: Any = None  # CostBreakdown from usage domain
 

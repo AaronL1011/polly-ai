@@ -21,6 +21,7 @@ from .entities import (
     QueryMetadata,
     RAGResult,
     Section,
+    SourceReference,
     TextBlock,
     TextFormat,
 )
@@ -147,6 +148,9 @@ class ExecuteQuery:
 
             processing_time_ms = int((time.time() - start_time) * 1000)
 
+            # Aggregate sources from retrieved chunks
+            sources = self._aggregate_sources(retrieval.chunks)
+
             # Build result
             result = RAGResult(
                 layout=layout,
@@ -159,6 +163,7 @@ class ExecuteQuery:
                     processing_time_ms=processing_time_ms,
                     model=model_used,
                 ),
+                sources=sources,
                 cached=False,
             )
 
@@ -306,3 +311,17 @@ class ExecuteQuery:
             result=result,
             cost=CostBreakdown.zero(),
         )
+
+    def _aggregate_sources(self, chunks: list) -> list[SourceReference]:
+        """Aggregate unique document sources from retrieved chunks."""
+        seen_docs: dict[str, SourceReference] = {}
+        for chunk in chunks:
+            doc_id = str(chunk.document_id)
+            if doc_id not in seen_docs:
+                seen_docs[doc_id] = SourceReference(
+                    document_id=doc_id,
+                    source_name=chunk.metadata.get("source_name", "Unknown"),
+                    source_url=chunk.metadata.get("source_url") or None,
+                    source_date=chunk.metadata.get("source_date") or None,
+                )
+        return list(seen_docs.values())

@@ -3,6 +3,7 @@
 
   let selectedFile: File | null = $state(null);
   let title = $state('');
+  let sourceUrl = $state('');
   let documentType = $state('other');
   let uploading = $state(false);
   let result: { success: boolean; message: string; jobId?: string } | null = $state(null);
@@ -28,6 +29,7 @@
         title: title || selectedFile.name,
         document_type: documentType,
         source: 'manual',
+        source_url: sourceUrl || undefined,
       });
 
       result = {
@@ -38,6 +40,7 @@
       
       selectedFile = null;
       title = '';
+      sourceUrl = '';
     } catch (error) {
       result = {
         success: false,
@@ -80,6 +83,18 @@
           placeholder="Enter document title"
           disabled={uploading}
         />
+      </div>
+
+      <div class="form-group">
+        <label for="sourceUrl">Source URL</label>
+        <input
+          type="url"
+          id="sourceUrl"
+          bind:value={sourceUrl}
+          placeholder="https://example.com/document"
+          disabled={uploading}
+        />
+        <p class="field-hint">Optional: URL where this document was sourced from</p>
       </div>
 
       <div class="form-group">
@@ -167,6 +182,7 @@
   }
 
   input[type="text"],
+  input[type="url"],
   select {
     padding: var(--spacing-3);
     border: 1px solid var(--color-gray-300);
@@ -179,6 +195,7 @@
   }
 
   input[type="text"]:focus,
+  input[type="url"]:focus,
   select:focus {
     outline: none;
     border-color: var(--color-primary);
@@ -186,6 +203,7 @@
   }
 
   input[type="text"]:disabled,
+  input[type="url"]:disabled,
   select:disabled {
     background: var(--color-gray-50);
     color: var(--color-text-secondary);
@@ -215,6 +233,12 @@
 
   .file-info {
     font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .field-hint {
+    font-size: var(--font-size-xs);
     color: var(--color-text-secondary);
     margin: 0;
   }

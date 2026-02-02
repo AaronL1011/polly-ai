@@ -57,8 +57,8 @@ class IngestDocument:
             document = Document.create(metadata=metadata, content=text_content)
             document.blob_ref = blob_ref
 
-            # Chunk the content
-            chunks = self._chunk_text(document.id, text_content)
+            # Chunk the content with document metadata for source tracking
+            chunks = self._chunk_text(document.id, text_content, metadata)
 
             # Embed chunks
             if chunks:
@@ -81,17 +81,28 @@ class IngestDocument:
             await self.job_store.save(job)
             raise
 
-    def _chunk_text(self, document_id: UUID, text: str) -> list[Chunk]:
+    def _chunk_text(
+        self, document_id: UUID, text: str, metadata: DocumentMetadata
+    ) -> list[Chunk]:
         chunks: list[Chunk] = []
         start = 0
         position = 0
+
+        # Build metadata to attach to each chunk for source tracking
+        chunk_metadata = {
+            "source_name": metadata.title or metadata.source,
+            "source_url": metadata.source_url or "",
+            "source_date": metadata.date or "",
+        }
 
         while start < len(text):
             end = start + self.chunk_size
             chunk_text = text[start:end]
 
             if chunk_text.strip():
-                chunks.append(Chunk.create(document_id, chunk_text, position))
+                chunk = Chunk.create(document_id, chunk_text, position)
+                chunk.metadata = chunk_metadata.copy()
+                chunks.append(chunk)
                 position += 1
 
             start = end - self.chunk_overlap

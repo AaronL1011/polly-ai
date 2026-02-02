@@ -41,6 +41,7 @@ async def upload(
     file: Annotated[UploadFile, File()],
     document_type: Annotated[str, Form()] = "other",
     source: Annotated[str, Form()] = "upload",
+    source_url: Annotated[str | None, Form()] = None,
     title: Annotated[str | None, Form()] = None,
     ingest_use_case: IngestDocument = Depends(get_ingest_document_use_case),
 ) -> JobResponse:
@@ -54,6 +55,7 @@ async def upload(
     metadata = DocumentMetadata(
         document_type=doc_type,
         source=source,
+        source_url=source_url,
         title=title or file.filename,
     )
 

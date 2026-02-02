@@ -1,13 +1,15 @@
 <script lang="ts">
-  import type { LayoutData, ComponentData } from '$lib/api/client';
+  import type { LayoutData, ComponentData, SourceReference } from '$lib/api/client';
   import Section from './Section.svelte';
+  import SourcesFooter from '$lib/components/ui/SourcesFooter.svelte';
 
   interface Props {
     layout: LayoutData;
     components: ComponentData[];
+    sources?: SourceReference[];
   }
 
-  let { layout, components }: Props = $props();
+  let { layout, components, sources = [] }: Props = $props();
 
   function getComponentsForSection(componentIds: string[]): ComponentData[] {
     return componentIds
@@ -36,6 +38,8 @@
       />
     {/each}
   </div>
+
+  <SourcesFooter {sources} />
 </div>
 
 <style>

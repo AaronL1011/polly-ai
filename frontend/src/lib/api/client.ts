@@ -48,12 +48,20 @@ export interface QueryMetadata {
   model: string;
 }
 
+export interface SourceReference {
+  document_id: string;
+  source_name: string;
+  source_url?: string;
+  source_date?: string;
+}
+
 export interface QueryResponse {
   layout: LayoutData;
   components: ComponentData[];
   cost: CostBreakdown;
   cached: boolean;
   metadata: QueryMetadata;
+  sources: SourceReference[];
 }
 
 export interface HealthResponse {
@@ -64,6 +72,7 @@ export interface UploadOptions {
   title?: string;
   document_type?: string;
   source?: string;
+  source_url?: string;
 }
 
 export interface UploadResponse {
@@ -116,6 +125,9 @@ class ApiClient {
     }
     if (options.source) {
       formData.append('source', options.source);
+    }
+    if (options.source_url) {
+      formData.append('source_url', options.source_url);
     }
 
     const response = await fetch(`${this.baseUrl}/ingestion/upload`, {

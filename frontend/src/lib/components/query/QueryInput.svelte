@@ -21,7 +21,7 @@
     <textarea
       bind:value={query}
       onkeydown={handleKeydown}
-      placeholder="Ask a question about politics, legislation, or government..."
+      placeholder="What would you like to know?"
       disabled={$queryStore.isLoading}
       rows="2"
     ></textarea>
@@ -47,7 +47,7 @@
   textarea {
     flex: 1;
     padding: var(--spacing-3) var(--spacing-4);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-lg);
     font-family: inherit;
     line-height: var(--line-height-normal);
     color: var(--color-text-primary);
@@ -60,6 +60,7 @@
 
   textarea::placeholder {
     color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
   }
 
   textarea:focus {

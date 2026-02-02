@@ -1,5 +1,3 @@
-"""Intent-driven context retriever for enhanced RAG retrieval."""
-
 import asyncio
 import logging
 from typing import Any
@@ -17,7 +15,7 @@ class IntentDrivenRetriever:
         self,
         embedder: Any,  # Embedder protocol
         vector_store: Any,  # VectorStore protocol
-        default_top_k: int = 20,
+        default_top_k: int = 10,
         min_chunks_for_sufficiency: int = 3,
     ):
         self.embedder = embedder
