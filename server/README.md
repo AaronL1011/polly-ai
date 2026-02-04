@@ -1,4 +1,4 @@
-# Polly Pipeline Server
+# Demócrata Server
 
 Python FastAPI + gRPC server. See [SPEC.md](../SPEC.md) for the project spec.
 

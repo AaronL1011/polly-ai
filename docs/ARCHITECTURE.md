@@ -1,12 +1,12 @@
-# Polly Pipeline — Architecture
+# Demócrata — Architecture
 
-This document describes the system architecture for Polly Pipeline. It expands on [SPEC.md](../SPEC.md) Section 3 (High-level architecture) and Section 4 (Component specifications).
+This document describes the system architecture for Demócrata. It expands on [SPEC.md](../SPEC.md) Section 3 (High-level architecture) and Section 4 (Component specifications).
 
 ---
 
 ## 1. Overview
 
-Polly Pipeline is a **stateless**, **horizontally scalable** political data ingestion and RAG query system. It consists of:
+Demócrata is a **stateless**, **horizontally scalable** political data ingestion and RAG query system. It consists of:
 
 - **Clients:** Web browser (users) and automated scrapers/jobs
 - **Application:** Web frontend (Svelte, gRPC-Web), API server (FastAPI, gRPC), Ingestion Pipeline, RAG Service

@@ -1,8 +1,8 @@
-# Polly Pipeline — Political Data Ingestion Engine
+# Demócrata — Political Data Ingestion Engine
 
 ## 1. Title and mission
 
-**Project name:** Polly Pipeline (political data ingestion engine)
+**Project name:** Demócrata (political data ingestion engine)
 
 **Mission:** Help people understand complex political information through clear, accessible explanations while maintaining factual non-partisanship.
 

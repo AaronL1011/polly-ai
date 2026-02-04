@@ -1,6 +1,6 @@
-# Polly Pipeline — Cost Model and Monetization
+# Demócrata — Cost Model and Monetization
 
-This document describes the cost model, pricing strategy, and usage tracking for Polly Pipeline. It provides the foundation for sustainable operation while maintaining civic accessibility.
+This document describes the cost model, pricing strategy, and usage tracking for Demócrata. It provides the foundation for sustainable operation while maintaining civic accessibility.
 
 ---
 

@@ -1,6 +1,6 @@
-# Polly Pipeline — Implementation Details
+# Demócrata — Implementation Details
 
-This document outlines implementation conventions, code layout, and technical details for Polly Pipeline. It expands on [SPEC.md](../SPEC.md) Section 6 (Architecture principles) and aligns with the monorepo structure.
+This document outlines implementation conventions, code layout, and technical details for Demócrata. It expands on [SPEC.md](../SPEC.md) Section 6 (Architecture principles) and aligns with the monorepo structure.
 
 ---
 

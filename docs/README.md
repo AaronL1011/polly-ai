@@ -1,6 +1,6 @@
-# Polly Pipeline — Documentation
+# Demócrata — Documentation
 
-Supporting documentation for the Polly Pipeline project. The canonical product and scope spec is [SPEC.md](../SPEC.md).
+Supporting documentation for the Demócrata project. The canonical product and scope spec is [SPEC.md](../SPEC.md).
 
 ---
 

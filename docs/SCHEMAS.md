@@ -1,6 +1,6 @@
-# Polly Pipeline — Schemas and API Contracts
+# Demócrata — Schemas and API Contracts
 
-This document outlines the API contracts and structured response schemas for Polly Pipeline. Full field-level definitions will live in protobuf (`.proto`) files; this document serves as the schema reference and design guide.
+This document outlines the API contracts and structured response schemas for Demócrata. Full field-level definitions will live in protobuf (`.proto`) files; this document serves as the schema reference and design guide.
 
 **Reference:** [SPEC.md](../SPEC.md) Section 7 (Key interfaces).
 

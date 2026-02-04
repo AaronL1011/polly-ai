@@ -1,12 +1,12 @@
-# Polly Pipeline — Scaling Strategy
+# Demócrata — Scaling Strategy
 
-This document describes the scaling considerations, challenges, and phased implementation roadmap for Polly Pipeline. It complements [ARCHITECTURE.md](ARCHITECTURE.md) and [IMPLEMENTATION.md](IMPLEMENTATION.md).
+This document describes the scaling considerations, challenges, and phased implementation roadmap for Demócrata. It complements [ARCHITECTURE.md](ARCHITECTURE.md) and [IMPLEMENTATION.md](IMPLEMENTATION.md).
 
 ---
 
 ## 1. Overview
 
-Polly Pipeline must handle variable traffic patterns, including significant bursts during election cycles, policy announcements, and major political events. The system must also support bulk ingestion of historical parliamentary data (years of bills, Hansard transcripts, voting records) while maintaining responsive query performance.
+Demócrata must handle variable traffic patterns, including significant bursts during election cycles, policy announcements, and major political events. The system must also support bulk ingestion of historical parliamentary data (years of bills, Hansard transcripts, voting records) while maintaining responsive query performance.
 
 This document outlines:
 - Key scaling challenges specific to political data RAG systems

@@ -1,7 +1,7 @@
 [project]
 name = "polly-pipeline-server"
 version = "0.1.0"
-description = "Polly Pipeline API server (FastAPI + gRPC)"
+description = "Demócrata API server (FastAPI + gRPC)"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

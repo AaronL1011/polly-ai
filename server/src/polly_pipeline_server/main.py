@@ -11,7 +11,7 @@ load_dotenv(project_root / ".env")
 from polly_pipeline_server.api.http.middleware.cors import setup_cors
 
 app = FastAPI(
-    title="Polly Pipeline",
+    title="Demócrata",
     description="Political data ingestion and RAG query API",
     version="0.1.0",
 )

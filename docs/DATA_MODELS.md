@@ -1,6 +1,6 @@
-# Polly Pipeline — Data Models
+# Demócrata — Data Models
 
-This document describes the domain and storage data models used by Polly Pipeline. It complements [SPEC.md](../SPEC.md) and [ARCHITECTURE.md](ARCHITECTURE.md).
+This document describes the domain and storage data models used by Demócrata. It complements [SPEC.md](../SPEC.md) and [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---
 
