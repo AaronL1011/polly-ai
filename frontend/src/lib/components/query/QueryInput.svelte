@@ -24,6 +24,7 @@
       placeholder="What would you like to know?"
       disabled={$queryStore.isLoading}
       rows="2"
+      spellcheck="false"
     ></textarea>
     <button type="submit" disabled={!query.trim() || $queryStore.isLoading}>
       {$queryStore.isLoading ? 'Searching...' : 'Search'}
@@ -47,7 +48,7 @@
   textarea {
     flex: 1;
     padding: var(--spacing-3) var(--spacing-4);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
     font-family: inherit;
     line-height: var(--line-height-normal);
     color: var(--color-text-primary);
@@ -55,12 +56,12 @@
     border: 1px solid var(--color-gray-300);
     border-radius: var(--radius-md);
     resize: none;
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    transition: border-color var(--transition-slow), box-shadow var(--transition-slow);
   }
 
   textarea::placeholder {
     color: var(--color-text-muted);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
   }
 
   textarea:focus {

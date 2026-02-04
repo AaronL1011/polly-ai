@@ -1,6 +1,5 @@
 """LLM-based data extractor for grounded extraction from context."""
 
-import json
 import logging
 from typing import Any
 
@@ -14,6 +13,7 @@ from polly_pipeline_server.domain.agents.entities import (
 )
 
 from .prompts.extractor import EXTRACTION_PROMPTS, GENERIC_EXTRACTION_PROMPT
+from .schemas import BaseExtractionSchema, get_extraction_schema
 
 logger = logging.getLogger(__name__)
 
@@ -28,13 +28,21 @@ class LLMDataExtractor:
         model: str = "gpt-4o",
         temperature: float = 0.1,
     ):
-        self.llm = ChatOpenAI(
-            api_key=api_key,
-            base_url=base_url,
-            model=model,
-            temperature=temperature,
-        )
+        self.api_key = api_key
+        self.base_url = base_url
         self.model = model
+        self.temperature = temperature
+
+    def _get_structured_llm(self, component_type: str) -> Any:
+        """Get an LLM configured with structured output for the given component type."""
+        schema = get_extraction_schema(component_type)
+        base_llm = ChatOpenAI(
+            api_key=self.api_key,
+            base_url=self.base_url,
+            model=self.model,
+            temperature=self.temperature,
+        )
+        return base_llm.with_structured_output(schema)
 
     async def extract(
         self,
@@ -47,16 +55,16 @@ class LLMDataExtractor:
             return ExtractionResult.empty(component_type, "No context available")
 
         prompt = self._build_prompt(component_type, context, intent)
+        structured_llm = self._get_structured_llm(component_type)
 
         messages = [
-            SystemMessage(content="You are a data extractor. Extract only facts explicitly stated in the context. Output JSON only."),
+            SystemMessage(content="You are a data extractor. Extract only facts explicitly stated in the context."),
             HumanMessage(content=prompt),
         ]
 
         try:
-            response = await self.llm.ainvoke(messages)
-            content = response.content
-            return self._parse_extraction(content, component_type)
+            response: BaseExtractionSchema = await structured_llm.ainvoke(messages)
+            return self._build_extraction_result(response, component_type)
         except Exception as e:
             logger.warning(f"Extraction failed for {component_type}: {e}")
             return ExtractionResult.empty(component_type, str(e))
@@ -102,46 +110,20 @@ class LLMDataExtractor:
 
         return prompt_template.format(**format_kwargs)
 
-    def _parse_extraction(self, content: str, component_type: str) -> ExtractionResult:
-        """Parse LLM response into ExtractionResult."""
-        try:
-            json_str = self._extract_json(content)
-            data = json.loads(json_str)
-            return self._build_extraction_result(data, component_type)
-        except (json.JSONDecodeError, KeyError, ValueError) as e:
-            logger.warning(f"Failed to parse extraction response: {e}")
-            return ExtractionResult.empty(component_type, f"Parse error: {e}")
-
-    def _extract_json(self, content: str) -> str:
-        """Extract JSON from response, handling markdown code blocks."""
-        if "```json" in content:
-            return content.split("```json")[1].split("```")[0]
-        elif "```" in content:
-            return content.split("```")[1].split("```")[0]
-        return content
-
-    def _build_extraction_result(self, data: dict[str, Any], component_type: str) -> ExtractionResult:
-        """Build ExtractionResult from parsed JSON data."""
+    def _build_extraction_result(
+        self, data: BaseExtractionSchema, component_type: str
+    ) -> ExtractionResult:
+        """Build ExtractionResult from structured output schema."""
         # Extract source quotes
-        source_quotes_raw = data.pop("source_quotes", [])
-        source_quotes = [
-            SourceQuote(text=quote) if isinstance(quote, str) else SourceQuote(
-                text=quote.get("text", str(quote)),
-                chunk_index=quote.get("chunk_index"),
-                document_id=quote.get("document_id"),
-            )
-            for quote in source_quotes_raw
-        ]
+        source_quotes = [SourceQuote(text=quote) for quote in data.source_quotes]
 
-        # Extract completeness and warnings
-        completeness = float(data.pop("completeness", 1.0))
-        completeness = max(0.0, min(1.0, completeness))
-        warnings = data.pop("warnings", [])
+        # Convert schema to dict for extracted_data, excluding base fields
+        data_dict = data.model_dump(exclude={"source_quotes", "completeness", "warnings"})
 
         return ExtractionResult(
             component_type=component_type,
-            extracted_data=data,
+            extracted_data=data_dict,
             source_quotes=source_quotes,
-            completeness=completeness,
-            warnings=warnings if isinstance(warnings, list) else [str(warnings)],
+            completeness=data.completeness,
+            warnings=data.warnings,
         )

@@ -20,7 +20,7 @@ class LLMConfig:
     model: str
     api_key: str | None = None
     base_url: str | None = None
-    temperature: float = 0.3
+    temperature: float = 0.1
     extra: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
@@ -34,14 +34,14 @@ class LLMConfig:
                 model=os.getenv("LLM_MODEL", "gpt-4o-mini"),
                 api_key=os.getenv("OPENAI_API_KEY"),
                 base_url=os.getenv("OPENAI_BASE_URL"),
-                temperature=float(os.getenv("LLM_TEMPERATURE", "0.3")),
+                temperature=float(os.getenv("LLM_TEMPERATURE", "0.1")),
             )
         elif provider == LLMProvider.OLLAMA:
             return cls(
                 provider=provider,
                 model=os.getenv("LLM_MODEL", "llama3.2"),
                 base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
-                temperature=float(os.getenv("LLM_TEMPERATURE", "0.3")),
+                temperature=float(os.getenv("LLM_TEMPERATURE", "0.1")),
             )
         else:
             raise ValueError(f"Unsupported LLM provider: {provider_str}")

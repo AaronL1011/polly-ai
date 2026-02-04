@@ -22,9 +22,9 @@
 <main class:has-results={$hasSubmitted}>
   <div class="hero-section" class:collapsed={$hasSubmitted}>
     <div class="hero-content">
-      <h1>Polly AI</h1>
+      <h1>Demócrata</h1>
       <p class="tagline">
-        Democratising politics through clear, factual analysis and intelligence.
+        Democratising politics through clear, factual and intelligent data analysis.
       </p>
     </div>
     
@@ -39,7 +39,7 @@
     </section>
 
     <footer>
-      <p>Polly AI strives to be non-partisan and factualy accurate. AI may have inaccuracies, always interrogate sources.</p>
+      <p>Demócrata strives to be non-partisan and factualy accurate. AI may have inaccuracies, always interrogate sources.</p>
     </footer>
   {/if}
 </main>
@@ -84,8 +84,9 @@
   }
 
   .hero-content h1 {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
+    font-family: 'Literata', serif;
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-semibold);
     color: var(--color-text-heading);
     margin: 0 0 var(--spacing-3);
     letter-spacing: -0.025em;
@@ -94,7 +95,7 @@
   }
 
   .hero-section.collapsed .hero-content h1 {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-2xl);
     margin-bottom: var(--spacing-1);
   }
 
@@ -111,7 +112,7 @@
   }
 
   .hero-section.collapsed .tagline {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
   }
 
   .query-container {

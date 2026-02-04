@@ -33,7 +33,7 @@ class LLMResponseComposer:
         api_key: str | None = None,
         base_url: str | None = None,
         model: str = "gpt-4o",
-        temperature: float = 0.3,
+        temperature: float = 0.1,
     ):
         self.llm = ChatOpenAI(
             api_key=api_key,

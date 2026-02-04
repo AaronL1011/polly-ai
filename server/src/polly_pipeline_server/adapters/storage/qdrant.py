@@ -1,7 +1,15 @@
 from uuid import UUID
 
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, PointStruct, VectorParams
+from qdrant_client.models import (
+    Distance,
+    FieldCondition,
+    Filter,
+    MatchAny,
+    PointStruct,
+    Range,
+    VectorParams,
+)
 
 from polly_pipeline_server.domain.ingestion.entities import Chunk
 
@@ -54,29 +62,75 @@ class QdrantVectorStore:
     async def search(
         self, vector: list[float], k: int = 10, filters: dict | None = None
     ) -> list[Chunk]:
+        query_filter = None # TODO: Enable filters when they dont restrict results too much
+        # query_filter = self._build_filter(filters) if filters else None
+
         results = self.client.query_points(
             collection_name=self.collection,
             query=vector,
             limit=k,
+            query_filter=query_filter,
         )
 
         chunks = []
         for result in results.points:
             payload = result.payload or {}
+            chunk_id = result.id
             chunks.append(
                 Chunk(
-                    id=UUID(result.id) if isinstance(result.id, str) else UUID(int=result.id),
+                    id=UUID(chunk_id) if isinstance(chunk_id, str) else UUID(int=chunk_id),
                     document_id=UUID(payload.get("document_id", "")),
                     text=payload.get("text", ""),
                     position=payload.get("position", 0),
                     metadata={
-                        k: v
-                        for k, v in payload.items()
-                        if k not in ("document_id", "text", "position")
+                        key: value
+                        for key, value in payload.items()
+                        if key not in ("document_id", "text", "position")
                     },
                 )
             )
         return chunks
+
+    def _build_filter(self, filters: dict) -> Filter | None:
+        """Build Qdrant filter from filter dictionary."""
+        conditions: list[FieldCondition] = []
+
+        # Document type filter (match any of the specified types)
+        if document_types := filters.get("document_type"):
+            if isinstance(document_types, list) and document_types:
+                conditions.append(
+                    FieldCondition(
+                        key="document_type",
+                        match=MatchAny(any=document_types),
+                    )
+                )
+            elif isinstance(document_types, str):
+                conditions.append(
+                    FieldCondition(
+                        key="document_type",
+                        match=MatchAny(any=[document_types]),
+                    )
+                )
+
+        # Date range filters (assumes 'date' field in payload as YYYY-MM-DD string)
+        date_range_params: dict[str, str | None] = {}
+        if date_from := filters.get("date_from"):
+            date_range_params["gte"] = date_from
+        if date_to := filters.get("date_to"):
+            date_range_params["lte"] = date_to
+
+        if date_range_params:
+            conditions.append(
+                FieldCondition(
+                    key="date",
+                    range=Range(**date_range_params),
+                )
+            )
+
+        if not conditions:
+            return None
+
+        return Filter(must=conditions)
 
     async def delete_by_document(self, document_id: UUID) -> None:
         self.client.delete(

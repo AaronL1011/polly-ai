@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,400..700;1,400..700&display=swap');
+
 /* ==========================================================================
    Design System Tokens - Minimalist Neutral Theme
    ========================================================================== */
@@ -90,6 +92,7 @@
   --font-size-xl: 1.25rem;     /* 20px */
   --font-size-2xl: 1.5rem;     /* 24px */
   --font-size-3xl: 1.875rem;   /* 30px */
+  --font-size-4xl: 2.25rem;     /* 36px */
 
   /* Font Weights */
   --font-weight-normal: 400;
@@ -159,6 +162,104 @@
   --max-width-md: 48rem;   /* 768px */
   --max-width-lg: 64rem;   /* 1024px */
   --max-width-xl: 80rem;   /* 1280px */
+}
+
+/* ==========================================================================
+   Dark Mode Theme - Muted Neutral Color Tokens
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* ==========================================================================
+       Base Colors (Neutral Zinc Scale)
+       True neutral grays without blue tint - easier on the eyes
+       ========================================================================== */
+    --color-gray-50: #09090b;
+    --color-gray-100: #18181b;
+    --color-gray-200: #27272a;
+    --color-gray-300: #3f3f46;
+    --color-gray-400: #52525b;
+    --color-gray-500: #71717a;
+    --color-gray-600: #a1a1aa;
+    --color-gray-700: #d4d4d8;
+    --color-gray-800: #e4e4e7;
+    --color-gray-900: #fafafa;
+
+    /* ==========================================================================
+       Primary Accent - Dusty Sage for Dark Backgrounds
+       Desaturated gray-green that feels calm and sophisticated
+       ========================================================================== */
+    --color-primary: #8ab4a8;          /* Dusty sage - muted gray-green */
+    --color-primary-hover: #a3c9be;    /* Lighter sage on hover */
+    --color-primary-active: #6d9a8d;   /* Deeper sage when pressed */
+    --color-primary-light: #1c2623;    /* Very dark sage background */
+    --color-primary-muted: #2a3b36;    /* Muted sage for selection/highlights */
+
+    /* ==========================================================================
+       Semantic Colors - Muted variants for dark backgrounds
+       ========================================================================== */
+    /* Success - Desaturated sage green */
+    --color-success: #86efac;          /* Soft green */
+    --color-success-hover: #bbf7d0;    /* Lighter green */
+    --color-success-light: #14281d;    /* Dark green background */
+    --color-success-muted: #1a3326;    /* Muted dark green */
+    --color-success-text: #86efac;     /* Soft green text */
+
+    /* Warning - Muted warm amber */
+    --color-warning: #fcd34d;          /* Soft amber */
+    --color-warning-hover: #fde68a;    /* Lighter amber */
+    --color-warning-light: #2a2008;    /* Dark amber background */
+    --color-warning-muted: #3d2e0a;    /* Muted dark amber */
+    --color-warning-text: #fcd34d;     /* Soft amber text */
+
+    /* Error - Muted coral (avoiding harsh red) */
+    --color-error: #fca5a5;            /* Soft coral */
+    --color-error-hover: #fecaca;      /* Lighter coral */
+    --color-error-light: #2a1215;      /* Dark coral background */
+    --color-error-muted: #3d1a1e;      /* Muted dark coral */
+    --color-error-text: #fca5a5;       /* Soft coral text */
+
+    /* Vote Colors - Muted greens and soft coral (avoiding red/blue) */
+    --color-vote-for: #86efac;         /* Soft green */
+    --color-vote-for-text: #bbf7d0;    /* Lighter green */
+    --color-vote-against: #fca5a5;     /* Soft coral */
+    --color-vote-against-text: #fecaca; /* Lighter coral */
+
+    /* ==========================================================================
+       Surfaces & Backgrounds
+       Layered neutral surfaces with subtle depth
+       ========================================================================== */
+    --color-background: #0f0f11;       /* Deep neutral - no blue cast */
+    --color-surface: #18181b;          /* Elevated surface */
+    --color-surface-hover: #27272a;    /* Hover state */
+    --color-surface-elevated: #27272a; /* Cards, modals */
+    --color-border: #3f3f46;           /* Subtle borders */
+    --color-border-light: #27272a;     /* Even subtler borders */
+
+    /* ==========================================================================
+       Text Colors
+       High contrast for readability, warm off-white
+       ========================================================================== */
+    --color-text-primary: #e4e4e7;     /* Warm off-white - easier on eyes */
+    --color-text-secondary: #a1a1aa;   /* Muted gray */
+    --color-text-muted: #71717a;       /* Very muted */
+    --color-text-heading: #fafafa;     /* Near white for headings */
+    --color-text-inverse: #18181b;     /* Dark text for light elements */
+
+    /* ==========================================================================
+       Shadows - Darker, more diffuse for dark mode
+       ========================================================================== */
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.35), 0 1px 2px -1px rgb(0 0 0 / 0.35);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.45), 0 8px 10px -6px rgb(0 0 0 / 0.45);
+
+    /* ==========================================================================
+       Focus Rings - Adjusted for dark backgrounds
+       ========================================================================== */
+    --focus-ring: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-primary-muted);
+    --focus-ring-error: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-error-muted);
+  }
 }
 
 /* ==========================================================================
