@@ -1,7 +1,7 @@
 import pytest
 from uuid import uuid4
 
-from polly_pipeline_server.domain.ingestion.entities import (
+from democrata_server.domain.ingestion.entities import (
     Chunk,
     Document,
     DocumentMetadata,
@@ -9,7 +9,7 @@ from polly_pipeline_server.domain.ingestion.entities import (
     Job,
     JobStatus,
 )
-from polly_pipeline_server.domain.usage.entities import CostBreakdown, UsageEvent
+from democrata_server.domain.usage.entities import CostBreakdown, UsageEvent
 
 
 class TestDocumentEntities:

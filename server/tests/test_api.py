@@ -2,7 +2,7 @@ import os
 import pytest
 from fastapi.testclient import TestClient
 
-from polly_pipeline_server.main import app
+from democrata_server.main import app
 
 
 @pytest.fixture

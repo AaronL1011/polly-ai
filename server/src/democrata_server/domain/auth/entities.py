@@ -1,5 +1,16 @@
+from dataclasses import dataclass, field
+from datetime import UTC, datetime
+from uuid import UUID
+
+
+def utc_now() -> datetime:
+    return datetime.now(UTC)
+
+
 @dataclass
 class User:
+    """Represents an authenticated user in the system."""
+
     id: UUID
     email: str
     name: str | None
@@ -8,22 +19,17 @@ class User:
     created_at: datetime
     updated_at: datetime
 
-@dataclass
-class Organization:
-    id: UUID
-    name: str
-    slug: str  # URL-friendly identifier
-    owner_id: UUID
-    billing_email: str
-    plan: OrganizationPlan  # free | pro | enterprise
-    max_seats: int
-    created_at: datetime
 
 @dataclass
-class Membership:
-    id: UUID
-    user_id: UUID
-    organization_id: UUID
-    role: MemberRole  # owner | admin | member | viewer
-    invited_by: UUID | None
-    joined_at: datetime
+class Session:
+    """Server-side representation of a Supabase auth session."""
+
+    access_token: str
+    refresh_token: str
+    user: User
+    expires_at: datetime
+    created_at: datetime = field(default_factory=utc_now)
+
+    @property
+    def is_expired(self) -> bool:
+        return utc_now() > self.expires_at

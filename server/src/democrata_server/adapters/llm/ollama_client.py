@@ -3,7 +3,7 @@ from typing import Any
 
 import httpx
 
-from polly_pipeline_server.domain.rag.entities import (
+from democrata_server.domain.rag.entities import (
     Component,
     Layout,
     Section,

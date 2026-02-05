@@ -6,7 +6,7 @@ from fastapi import HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 
-from polly_pipeline_server.api.http.deps import get_session_id
+from democrata_server.api.http.deps import get_session_id
 
 
 class RateLimitMiddleware(BaseHTTPMiddleware):

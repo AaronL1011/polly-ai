@@ -20,10 +20,10 @@ The server follows **domain-centred** structure with **inversion of dependencies
 - **Domain core** has no FastAPI, gRPC, or infrastructure imports. It defines use cases, entities, and interfaces (ports).
 - **Adapters** depend on the domain: HTTP/gRPC handlers, S3 client, Redis client, vector store client, LLM/embedding clients. They implement ports defined by the domain.
 
-Recommended layout under `server/src/polly_pipeline_server/`:
+Recommended layout under `server/src/democrata_server/`:
 
 ```
-polly_pipeline_server/
+democrata_server/
 ├── __init__.py
 ├── main.py                 # FastAPI app, gRPC registration (adapters)
 ├── api/                    # HTTP/gRPC adapters (depend on domain)

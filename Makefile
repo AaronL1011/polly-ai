@@ -7,7 +7,7 @@ install:
 
 # Run the API server (FastAPI)
 server:
-	cd server && uv run uvicorn polly_pipeline_server.main:app --reload
+	cd server && uv run uvicorn democrata_server.main:app --reload
 
 # Run the frontend dev server (Svelte + Vite)
 frontend:
@@ -52,7 +52,7 @@ clean:
 	rm -rf server/.venv
 	rm -rf node_modules frontend/node_modules
 	rm -rf frontend/dist
-	rm -rf server/src/polly_pipeline_server/gen
+	rm -rf server/src/democrata_server/gen
 	rm -rf frontend/src/gen
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 	find . -type d -name .ruff_cache -exec rm -rf {} + 2>/dev/null || true

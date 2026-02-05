@@ -5,7 +5,7 @@ import logging
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 
-from polly_pipeline_server.domain.agents.entities import (
+from democrata_server.domain.agents.entities import (
     ExtractedEntities,
     IntentResult,
     QueryType,

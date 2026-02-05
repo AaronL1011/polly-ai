@@ -2,8 +2,8 @@ import asyncio
 import logging
 from typing import Any
 
-from polly_pipeline_server.domain.agents.entities import IntentResult, RetrievalStrategy
-from polly_pipeline_server.domain.rag.entities import RetrievalResult
+from democrata_server.domain.agents.entities import IntentResult, RetrievalStrategy
+from democrata_server.domain.rag.entities import RetrievalResult
 
 logger = logging.getLogger(__name__)
 

@@ -4,10 +4,10 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel
 
-from polly_pipeline_server.adapters.usage.memory_store import InMemoryJobStore
-from polly_pipeline_server.api.http.deps import get_ingest_document_use_case, get_job_store
-from polly_pipeline_server.domain.ingestion.entities import DocumentMetadata, DocumentType
-from polly_pipeline_server.domain.ingestion.use_cases import IngestDocument
+from democrata_server.adapters.usage.memory_store import InMemoryJobStore
+from democrata_server.api.http.deps import get_ingest_document_use_case, get_job_store
+from democrata_server.domain.ingestion.entities import DocumentMetadata, DocumentType
+from democrata_server.domain.ingestion.use_cases import IngestDocument
 
 router = APIRouter()
 

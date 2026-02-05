@@ -2,7 +2,7 @@
 
 import logging
 
-from polly_pipeline_server.domain.rag.entities import (
+from democrata_server.domain.rag.entities import (
     Chart,
     ChartDataPoint,
     ChartSeries,
@@ -24,6 +24,7 @@ from polly_pipeline_server.domain.rag.entities import (
     TimelineEvent,
     VotingBreakdown,
 )
+from democrata_server.adapters.llm.constraints import validate_component, ConstraintViolation
 
 logger = logging.getLogger(__name__)
 
@@ -405,7 +406,11 @@ TYPE_ALIASES = {
 
 
 def parse_component(data: dict) -> Component | None:
-    """Parse a component dictionary into a domain Component object."""
+    """Parse a component dictionary into a domain Component object.
+    
+    Validates component data against constraints before creating.
+    Returns None if the component data is insufficient or invalid.
+    """
     raw_type = data.get("type", "")
     size = data.get("size")  # Extract size property
     
@@ -415,12 +420,17 @@ def parse_component(data: dict) -> Component | None:
     # Apply aliases
     comp_type = TYPE_ALIASES.get(normalized_type, normalized_type)
 
+    # Validate component data against constraints
+    validation = validate_component(comp_type, data)
+    if not validation.is_valid:
+        logger.info(
+            f"Skipping {comp_type}: {validation.reason}"
+            + (f" (suggestion: {validation.suggestion})" if validation.suggestion else "")
+        )
+        return None
+
     if comp_type == "text_block":
         content = data.get("content", "").strip()
-        if not content:
-            logger.debug("Skipping text_block with empty content")
-            return None
-
         return Component.create(
             TextBlock(
                 content=content,
@@ -432,10 +442,6 @@ def parse_component(data: dict) -> Component | None:
 
     elif comp_type == "notice":
         message = data.get("message", "").strip()
-        if not message:
-            logger.debug("Skipping notice with empty message")
-            return None
-
         level_str = data.get("level", "info")
         level = NoticeLevel.INFO
         if level_str == "warning":
@@ -479,7 +485,7 @@ def parse_component(data: dict) -> Component | None:
                 )
 
         if not series:
-            logger.debug("Skipping chart with no series data")
+            # This shouldn't happen if constraints passed, but handle gracefully
             return None
 
         return Component.create(
@@ -509,7 +515,7 @@ def parse_component(data: dict) -> Component | None:
         ]
 
         if not events:
-            logger.debug("Skipping timeline with no events")
+            # This shouldn't happen if constraints passed, but handle gracefully
             return None
 
         return Component.create(
@@ -541,7 +547,7 @@ def parse_component(data: dict) -> Component | None:
                 parsed_rows.append({str(k): str(v) for k, v in row.items()})
 
         if not columns or not parsed_rows:
-            logger.debug("Skipping data_table with no columns or rows")
+            # This shouldn't happen if constraints passed, but handle gracefully
             return None
 
         return Component.create(
@@ -576,7 +582,7 @@ def parse_component(data: dict) -> Component | None:
         ]
 
         if not items or not attributes:
-            logger.debug("Skipping comparison with no items or attributes")
+            # This shouldn't happen if constraints passed, but handle gracefully
             return None
 
         return Component.create(
@@ -607,7 +613,7 @@ def parse_component(data: dict) -> Component | None:
         ]
 
         if not members:
-            logger.debug("Skipping member_profiles with no members")
+            # This shouldn't happen if constraints passed, but handle gracefully
             return None
 
         return Component.create(
@@ -635,16 +641,6 @@ def parse_component(data: dict) -> Component | None:
 
         total_for = int(data.get("total_for", 0))
         total_against = int(data.get("total_against", 0))
-
-        # Must have either totals or party breakdown with votes
-        has_totals = total_for > 0 or total_against > 0
-        has_party_votes = any(
-            p.votes_for > 0 or p.votes_against > 0 for p in party_breakdown
-        )
-
-        if not has_totals and not has_party_votes:
-            logger.debug("Skipping voting_breakdown with no vote data")
-            return None
 
         return Component.create(
             VotingBreakdown(

@@ -2,17 +2,17 @@ import os
 
 import pytest
 
-from polly_pipeline_server.adapters.llm.config import (
+from democrata_server.adapters.llm.config import (
     EmbeddingConfig,
     EmbeddingProvider,
     LLMConfig,
     LLMProvider,
 )
-from polly_pipeline_server.adapters.llm.embedder import OpenAIEmbedder
-from polly_pipeline_server.adapters.llm.factory import create_embedder, create_llm_client
-from polly_pipeline_server.adapters.llm.langchain_client import LangChainLLMClient
-from polly_pipeline_server.adapters.llm.ollama_client import OllamaLLMClient
-from polly_pipeline_server.adapters.llm.ollama_embedder import OllamaEmbedder
+from democrata_server.adapters.llm.embedder import OpenAIEmbedder
+from democrata_server.adapters.llm.factory import create_embedder, create_llm_client
+from democrata_server.adapters.llm.langchain_client import LangChainLLMClient
+from democrata_server.adapters.llm.ollama_client import OllamaLLMClient
+from democrata_server.adapters.llm.ollama_embedder import OllamaEmbedder
 
 
 class TestLLMConfig:

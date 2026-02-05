@@ -2,9 +2,9 @@ version: v2
 plugins:
   # Python gRPC generation
   - remote: buf.build/protocolbuffers/python
-    out: server/src/polly_pipeline_server/gen
+    out: server/src/democrata_server/gen
   - remote: buf.build/grpc/python
-    out: server/src/polly_pipeline_server/gen
+    out: server/src/democrata_server/gen
 
   # TypeScript/ES generation for Connect
   - remote: buf.build/bufbuild/es

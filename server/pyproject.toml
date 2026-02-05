@@ -1,5 +1,5 @@
 [project]
-name = "polly-pipeline-server"
+name = "democrata-server"
 version = "0.1.0"
 description = "Demócrata API server (FastAPI + gRPC)"
 readme = "README.md"
@@ -14,6 +14,7 @@ dependencies = [
     "protobuf>=4.25.0",
     # Data validation
     "pydantic>=2.9.0",
+    "email-validator>=2.1.0",
     # LLM / RAG
     "langchain>=0.3.0",
     "langchain-openai>=0.2.0",
@@ -25,13 +26,18 @@ dependencies = [
     "aiofiles>=24.0.0",
     # Vector store (using Qdrant for MVP - simpler setup than pgvector)
     "qdrant-client>=1.12.0",
-    # Async Postgres (for future user/billing tables)
+    # Async Postgres
     "asyncpg>=0.30.0",
+    # HTTP client
     "httpx>=0.28.1",
     # Environment variable loading
     "python-dotenv>=1.0.0",
     # Document parsing
     "pypdf>=6.0.0",
+    # Auth (Supabase uses standard HTTP API, no special client needed)
+    # Payment processing (Stripe uses standard HTTP API)
+    # Note: We use httpx for both Supabase and Stripe API calls
+    # to keep dependencies minimal and maintain full control
 ]
 
 [project.optional-dependencies]
@@ -52,7 +58,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/polly_pipeline_server"]
+packages = ["src/democrata_server"]
 
 [tool.ruff]
 target-version = "py312"

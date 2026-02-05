@@ -2,7 +2,7 @@
 
 from typing import Any, Protocol
 
-from polly_pipeline_server.domain.rag.entities import Component, Layout
+from democrata_server.domain.rag.entities import Component, Layout
 
 from .entities import (
     ExtractionResult,

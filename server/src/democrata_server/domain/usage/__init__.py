@@ -1,11 +1,21 @@
-from .entities import CostBreakdown, UsageEvent, UsageEventType, UserBalance
-from .ports import BalanceStore, UsageLogger
+from .entities import (
+    AnonymousSession,
+    CostBreakdown,
+    UsageEvent,
+    UsageEventType,
+)
+from .ports import (
+    AnonymousSessionStore,
+    UsageEventRepository,
+    UsageLogger,
+)
 
 __all__ = [
     "CostBreakdown",
     "UsageEvent",
     "UsageEventType",
-    "UserBalance",
+    "AnonymousSession",
+    "UsageEventRepository",
     "UsageLogger",
-    "BalanceStore",
+    "AnonymousSessionStore",
 ]

@@ -20,7 +20,7 @@ cd server && uv sync
 
 ```bash
 make server
-# or: cd server && uv run uvicorn polly_pipeline_server.main:app --reload
+# or: cd server && uv run uvicorn democrata_server.main:app --reload
 ```
 
 ## Tests

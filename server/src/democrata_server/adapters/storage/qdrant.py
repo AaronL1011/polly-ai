@@ -11,14 +11,14 @@ from qdrant_client.models import (
     VectorParams,
 )
 
-from polly_pipeline_server.domain.ingestion.entities import Chunk
+from democrata_server.domain.ingestion.entities import Chunk
 
 
 class QdrantVectorStore:
     def __init__(
         self,
         url: str = "http://localhost:6333",
-        collection: str = "polly_chunks",
+        collection: str = "democrata_chunks",
         vector_size: int = 768,
     ):
         self.client = QdrantClient(url=url)

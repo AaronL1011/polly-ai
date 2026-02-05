@@ -7,11 +7,11 @@ from typing import Any
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 
-from polly_pipeline_server.domain.agents.entities import (
+from democrata_server.domain.agents.entities import (
     UnsupportedClaim,
     VerificationResult,
 )
-from polly_pipeline_server.domain.rag.entities import Component, Layout
+from democrata_server.domain.rag.entities import Component, Layout
 
 from .prompts.verifier import VERIFIER_PROMPT
 

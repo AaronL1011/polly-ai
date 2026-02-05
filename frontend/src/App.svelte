@@ -3,9 +3,17 @@
   import QueryInput from '$lib/components/query/QueryInput.svelte';
   import QueryResults from '$lib/components/query/QueryResults.svelte';
   import UploadPage from '$lib/components/upload/UploadPage.svelte';
+  import UserMenu from '$lib/components/auth/UserMenu.svelte';
+  import SettingsPage from '$lib/components/auth/SettingsPage.svelte';
   import { hasSubmitted } from '$lib/stores/query';
+  import { authStore } from '$lib/stores/auth';
 
   let currentPath = $state(window.location.pathname);
+
+  // Initialize auth on mount
+  $effect(() => {
+    authStore.initialize();
+  });
 
   $effect(() => {
     const handlePopState = () => {
@@ -16,13 +24,18 @@
   });
 </script>
 
-{#if currentPath === '/upload'}
+<!-- User menu is always visible -->
+<UserMenu />
+
+{#if currentPath === '/settings'}
+  <SettingsPage />
+{:else if currentPath === '/upload'}
   <UploadPage />
 {:else}
 <main class:has-results={$hasSubmitted}>
   <div class="hero-section" class:collapsed={$hasSubmitted}>
     <div class="hero-content">
-      <h1>Demócrata</h1>
+      <a href="/"><h1>Demócrata</h1></a>
       <p class="tagline">
         Democratising politics through clear, factual and intelligent data analysis.
       </p>
@@ -83,10 +96,14 @@
     margin-bottom: var(--spacing-4);
   }
 
-  .hero-content h1 {
+  .hero-content a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .hero-content a h1 {
     font-family: 'Literata', serif;
     font-size: var(--font-size-4xl);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-medium);
     color: var(--color-text-heading);
     margin: 0 0 var(--spacing-3);
     letter-spacing: -0.025em;

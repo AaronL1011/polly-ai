@@ -96,7 +96,7 @@ flowchart TB
 
 ### 1.1 Auth Entities
 
-Create `[server/src/polly_pipeline_server/domain/auth/entities.py](server/src/polly_pipeline_server/domain/auth/entities.py)`:
+Create `[server/src/democrata_server/domain/auth/entities.py](server/src/democrata_server/domain/auth/entities.py)`:
 
 ```python
 @dataclass
@@ -132,7 +132,7 @@ class Membership:
 
 ### 1.2 Auth Ports
 
-Create `[server/src/polly_pipeline_server/domain/auth/ports.py](server/src/polly_pipeline_server/domain/auth/ports.py)`:
+Create `[server/src/democrata_server/domain/auth/ports.py](server/src/democrata_server/domain/auth/ports.py)`:
 
 ```python
 class AuthProvider(Protocol):
@@ -469,7 +469,7 @@ class PostgresRepository:
 
 ### 3.1 Supabase Auth Adapter
 
-Create `[server/src/polly_pipeline_server/adapters/auth/supabase.py](server/src/polly_pipeline_server/adapters/auth/supabase.py)`:
+Create `[server/src/democrata_server/adapters/auth/supabase.py](server/src/democrata_server/adapters/auth/supabase.py)`:
 
 - Implement `AuthProvider` protocol using `supabase-py` client
 - Validate JWTs from Supabase Auth
@@ -477,7 +477,7 @@ Create `[server/src/polly_pipeline_server/adapters/auth/supabase.py](server/src/
 
 ### 3.2 PostgreSQL Repository Adapter
 
-Create `[server/src/polly_pipeline_server/adapters/storage/postgres.py](server/src/polly_pipeline_server/adapters/storage/postgres.py)`:
+Create `[server/src/democrata_server/adapters/storage/postgres.py](server/src/democrata_server/adapters/storage/postgres.py)`:
 
 - Implement `UserRepository`, `OrganizationRepository` protocols
 - Implement `BalanceStore`, `UsageLogger` from existing usage ports
@@ -486,7 +486,7 @@ Create `[server/src/polly_pipeline_server/adapters/storage/postgres.py](server/s
 
 ### 3.3 Payment Adapter (Stripe)
 
-Create `[server/src/polly_pipeline_server/adapters/billing/stripe.py](server/src/polly_pipeline_server/adapters/billing/stripe.py)`:
+Create `[server/src/democrata_server/adapters/billing/stripe.py](server/src/democrata_server/adapters/billing/stripe.py)`:
 
 - Implement `PaymentProvider` protocol
 - Handle credit pack purchases ($5, $10, $20)
@@ -499,7 +499,7 @@ Create `[server/src/polly_pipeline_server/adapters/billing/stripe.py](server/src
 
 ### 4.1 Auth Endpoints
 
-Add to `[server/src/polly_pipeline_server/api/http/routes/](server/src/polly_pipeline_server/api/http/routes/)`:
+Add to `[server/src/democrata_server/api/http/routes/](server/src/democrata_server/api/http/routes/)`:
 
 
 | Endpoint        | Method | Description                         |
@@ -590,9 +590,9 @@ postgres:
   ports:
     - "5432:5432"
   environment:
-    POSTGRES_USER: polly
-    POSTGRES_PASSWORD: polly_dev
-    POSTGRES_DB: polly_pipeline
+    POSTGRES_USER: democrata
+    POSTGRES_PASSWORD: democrata_dev
+    POSTGRES_DB: democrata_pipeline
   volumes:
     - postgres-data:/var/lib/postgresql/data
 ```
@@ -611,7 +611,7 @@ SUPABASE_SERVICE_KEY=your-service-key
 SUPABASE_JWT_SECRET=your-jwt-secret
 
 # Database (for local dev, production uses Supabase)
-DATABASE_URL=postgresql://polly:polly_dev@localhost:5432/polly_pipeline
+DATABASE_URL=postgresql://democrata:democrata_dev@localhost:5432/democrata_pipeline
 
 # Stripe
 STRIPE_SECRET_KEY=sk_test_...
@@ -841,14 +841,14 @@ async def on_user_signup(user_id: UUID, session_id: str):
 
 ### New Files
 
-- `server/src/polly_pipeline_server/domain/auth/entities.py`
-- `server/src/polly_pipeline_server/domain/auth/ports.py`
-- `server/src/polly_pipeline_server/adapters/auth/supabase.py`
-- `server/src/polly_pipeline_server/adapters/storage/postgres.py`
-- `server/src/polly_pipeline_server/adapters/billing/stripe.py`
-- `server/src/polly_pipeline_server/api/http/routes/auth.py`
-- `server/src/polly_pipeline_server/api/http/routes/orgs.py`
-- `server/src/polly_pipeline_server/api/http/routes/billing.py`
+- `server/src/democrata_server/domain/auth/entities.py`
+- `server/src/democrata_server/domain/auth/ports.py`
+- `server/src/democrata_server/adapters/auth/supabase.py`
+- `server/src/democrata_server/adapters/storage/postgres.py`
+- `server/src/democrata_server/adapters/billing/stripe.py`
+- `server/src/democrata_server/api/http/routes/auth.py`
+- `server/src/democrata_server/api/http/routes/orgs.py`
+- `server/src/democrata_server/api/http/routes/billing.py`
 - `frontend/src/lib/supabase.ts`
 - `frontend/src/lib/components/auth/*.svelte`
 - `frontend/src/lib/components/org/*.svelte`
@@ -859,8 +859,8 @@ async def on_user_signup(user_id: UUID, session_id: str):
 
 - `[docker-compose.yml](docker-compose.yml)` - Add PostgreSQL
 - `[.env.example](.env.example)` - Add Supabase/Stripe config
-- `[server/src/polly_pipeline_server/domain/usage/entities.py](server/src/polly_pipeline_server/domain/usage/entities.py)` - Add billing account reference
-- `[server/src/polly_pipeline_server/domain/usage/ports.py](server/src/polly_pipeline_server/domain/usage/ports.py)` - Add transaction store port
+- `[server/src/democrata_server/domain/usage/entities.py](server/src/democrata_server/domain/usage/entities.py)` - Add billing account reference
+- `[server/src/democrata_server/domain/usage/ports.py](server/src/democrata_server/domain/usage/ports.py)` - Add transaction store port
 - `server/pyproject.toml` - Add `supabase`, `stripe` dependencies
 - `frontend/package.json` - Add `@supabase/supabase-js`
 

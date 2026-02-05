@@ -7,8 +7,8 @@ from typing import Any
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 
-from polly_pipeline_server.domain.agents.entities import ExtractionResult, IntentResult
-from polly_pipeline_server.domain.rag.entities import (
+from democrata_server.domain.agents.entities import ExtractionResult, IntentResult
+from democrata_server.domain.rag.entities import (
     Component,
     Layout,
     Notice,
@@ -18,7 +18,7 @@ from polly_pipeline_server.domain.rag.entities import (
     TextFormat,
 )
 
-from polly_pipeline_server.adapters.llm.components import parse_component
+from democrata_server.adapters.llm.components import parse_component
 
 from .prompts.composer import COMPOSER_PROMPT
 

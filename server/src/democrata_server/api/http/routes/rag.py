@@ -4,9 +4,9 @@ from enum import Enum
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from polly_pipeline_server.api.http.deps import get_execute_query_use_case, get_session_id
-from polly_pipeline_server.domain.rag.entities import Query, QueryFilters
-from polly_pipeline_server.domain.rag.use_cases import ExecuteQuery
+from democrata_server.api.http.deps import get_execute_query_use_case, get_session_id
+from democrata_server.domain.rag.entities import Query, QueryFilters
+from democrata_server.domain.rag.use_cases import ExecuteQuery
 
 router = APIRouter()
 

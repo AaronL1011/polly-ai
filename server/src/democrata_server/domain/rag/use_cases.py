@@ -3,15 +3,15 @@ import time
 import asyncio
 from dataclasses import dataclass
 
-from polly_pipeline_server.domain.agents.entities import IntentResult
-from polly_pipeline_server.domain.agents.ports import (
+from democrata_server.domain.agents.entities import IntentResult
+from democrata_server.domain.agents.ports import (
     DataExtractor,
     QueryPlanner,
     ResponseComposer,
     ResponseVerifier,
 )
-from polly_pipeline_server.domain.ingestion.ports import Embedder, VectorStore
-from polly_pipeline_server.domain.usage.entities import CostBreakdown
+from democrata_server.domain.ingestion.ports import Embedder, VectorStore
+from democrata_server.domain.usage.entities import CostBreakdown
 
 from .entities import (
     Component,
@@ -254,7 +254,7 @@ class ExecuteQuery:
         verification: "VerificationResult",
     ) -> list[Component]:
         """Add a notice about verification issues without removing components."""
-        from polly_pipeline_server.domain.agents.entities import VerificationResult
+        from democrata_server.domain.agents.entities import VerificationResult
 
         if not verification.unsupported_claims:
             return components

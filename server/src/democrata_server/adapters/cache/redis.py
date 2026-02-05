@@ -4,7 +4,7 @@ from typing import Any
 
 import redis.asyncio as redis
 
-from polly_pipeline_server.domain.rag.entities import Query
+from democrata_server.domain.rag.entities import Query
 
 
 class RedisCache:

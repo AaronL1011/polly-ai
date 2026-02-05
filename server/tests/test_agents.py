@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 
-from polly_pipeline_server.domain.agents.entities import (
+from democrata_server.domain.agents.entities import (
     ExtractionResult,
     ExtractedEntities,
     IntentResult,
@@ -14,11 +14,11 @@ from polly_pipeline_server.domain.agents.entities import (
     UnsupportedClaim,
     VerificationResult,
 )
-from polly_pipeline_server.domain.rag.entities import RetrievalResult
-from polly_pipeline_server.adapters.agents.config import AgentConfig
-from polly_pipeline_server.adapters.agents.planner import LLMQueryPlanner
-from polly_pipeline_server.adapters.agents.extractor import LLMDataExtractor
-from polly_pipeline_server.adapters.agents.retriever import IntentDrivenRetriever
+from democrata_server.domain.rag.entities import RetrievalResult
+from democrata_server.adapters.agents.config import AgentConfig
+from democrata_server.adapters.agents.planner import LLMQueryPlanner
+from democrata_server.adapters.agents.extractor import LLMDataExtractor
+from democrata_server.adapters.agents.retriever import IntentDrivenRetriever
 
 
 class TestIntentResult:

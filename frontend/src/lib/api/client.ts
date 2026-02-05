@@ -1,5 +1,9 @@
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
+// =============================================================================
+// Query Types
+// =============================================================================
+
 export interface QueryRequest {
   query: string;
   filters?: {
@@ -81,57 +85,216 @@ export interface UploadResponse {
   progress_percent: number;
 }
 
+// =============================================================================
+// Auth Types
+// =============================================================================
+
+export interface UserResponse {
+  id: string;
+  email: string;
+  name: string | null;
+  avatar_url: string | null;
+  email_verified: boolean;
+}
+
+export interface SessionResponse {
+  user: UserResponse;
+  expires_at?: string;
+}
+
+// =============================================================================
+// Organization Types
+// =============================================================================
+
+export interface OrganizationResponse {
+  id: string;
+  name: string;
+  slug: string;
+  owner_id: string;
+  billing_email: string;
+  plan: string;
+  max_seats: number;
+  member_count?: number;
+}
+
+export interface MembershipResponse {
+  id: string;
+  user_id: string;
+  organization_id: string;
+  role: string;
+  joined_at: string;
+  user_email?: string;
+  user_name?: string;
+}
+
+export interface InvitationResponse {
+  id: string;
+  email: string;
+  organization_id: string;
+  role: string;
+  status: string;
+  expires_at: string;
+  created_at: string;
+}
+
+export interface CreateOrganizationRequest {
+  name: string;
+  slug: string;
+  billing_email: string;
+}
+
+export interface InviteMemberRequest {
+  email: string;
+  role?: string;
+}
+
+// =============================================================================
+// Billing Types
+// =============================================================================
+
+export interface BillingAccountResponse {
+  id: string;
+  account_type: 'user' | 'organization';
+  credits: number;
+  free_tier_remaining: number;
+  free_tier_reset_at: string | null;
+  lifetime_credits: number;
+  lifetime_usage: number;
+  has_stripe_customer: boolean;
+}
+
+export interface CreditPackResponse {
+  credits: number;
+  price_cents: number;
+  price_dollars: number;
+}
+
+export interface TransactionResponse {
+  id: string;
+  amount: number;
+  transaction_type: string;
+  balance_after: number;
+  description: string | null;
+  reference_id: string | null;
+  created_at: string;
+}
+
+export interface CheckoutResponse {
+  session_id: string;
+  checkout_url: string;
+  expires_at: string;
+}
+
+export interface UsageSummaryResponse {
+  total_usage: number;
+  total_purchases: number;
+  period_start: string;
+  period_end: string;
+}
+
+// =============================================================================
+// API Client
+// =============================================================================
+
 class ApiClient {
   private baseUrl: string;
+  private accessToken: string | null = null;
+  private organizationId: string | null = null;
 
   constructor(baseUrl: string = API_BASE) {
     this.baseUrl = baseUrl;
   }
 
-  async health(): Promise<HealthResponse> {
-    const response = await fetch(`${this.baseUrl}/health`);
-    if (!response.ok) {
-      throw new Error(`Health check failed: ${response.status}`);
-    }
-    return response.json();
+  // Set the access token for authenticated requests
+  setAccessToken(token: string | null) {
+    this.accessToken = token;
   }
 
-  async query(request: QueryRequest): Promise<QueryResponse> {
-    const response = await fetch(`${this.baseUrl}/rag/query`, {
-      method: 'POST',
+  // Set the active organization context
+  setOrganizationId(orgId: string | null) {
+    this.organizationId = orgId;
+  }
+
+  // Build headers for requests
+  private getHeaders(includeContentType = true): HeadersInit {
+    const headers: Record<string, string> = {};
+    
+    if (includeContentType) {
+      headers['Content-Type'] = 'application/json';
+    }
+    
+    if (this.accessToken) {
+      headers['Authorization'] = `Bearer ${this.accessToken}`;
+    }
+    
+    if (this.organizationId) {
+      headers['X-Organization-Id'] = this.organizationId;
+    }
+    
+    return headers;
+  }
+
+  // Generic request helper
+  private async request<T>(
+    path: string,
+    options: RequestInit = {}
+  ): Promise<T> {
+    const response = await fetch(`${this.baseUrl}${path}`, {
+      ...options,
       headers: {
-        'Content-Type': 'application/json',
+        ...this.getHeaders(options.method !== 'GET'),
+        ...options.headers,
       },
-      body: JSON.stringify(request),
     });
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-      throw new Error(error.detail || `Query failed: ${response.status}`);
+      throw new Error(error.detail || `Request failed: ${response.status}`);
+    }
+
+    // Handle 204 No Content
+    if (response.status === 204) {
+      return undefined as T;
     }
 
     return response.json();
   }
+
+  // ==========================================================================
+  // Health
+  // ==========================================================================
+
+  async health(): Promise<HealthResponse> {
+    return this.request('/health');
+  }
+
+  // ==========================================================================
+  // RAG Query
+  // ==========================================================================
+
+  async query(request: QueryRequest): Promise<QueryResponse> {
+    return this.request('/rag/query', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    });
+  }
+
+  // ==========================================================================
+  // Ingestion
+  // ==========================================================================
 
   async upload(file: File, options: UploadOptions = {}): Promise<UploadResponse> {
     const formData = new FormData();
     formData.append('file', file);
     
-    if (options.title) {
-      formData.append('title', options.title);
-    }
-    if (options.document_type) {
-      formData.append('document_type', options.document_type);
-    }
-    if (options.source) {
-      formData.append('source', options.source);
-    }
-    if (options.source_url) {
-      formData.append('source_url', options.source_url);
-    }
+    if (options.title) formData.append('title', options.title);
+    if (options.document_type) formData.append('document_type', options.document_type);
+    if (options.source) formData.append('source', options.source);
+    if (options.source_url) formData.append('source_url', options.source_url);
 
     const response = await fetch(`${this.baseUrl}/ingestion/upload`, {
       method: 'POST',
+      headers: this.accessToken ? { 'Authorization': `Bearer ${this.accessToken}` } : {},
       body: formData,
     });
 
@@ -141,6 +304,113 @@ class ApiClient {
     }
 
     return response.json();
+  }
+
+  // ==========================================================================
+  // Auth
+  // ==========================================================================
+
+  async getSession(): Promise<SessionResponse> {
+    return this.request('/auth/session');
+  }
+
+  async logout(): Promise<void> {
+    return this.request('/auth/logout', { method: 'POST' });
+  }
+
+  // ==========================================================================
+  // Organizations
+  // ==========================================================================
+
+  async getOrganizations(): Promise<OrganizationResponse[]> {
+    return this.request('/orgs');
+  }
+
+  async getOrganization(slug: string): Promise<OrganizationResponse> {
+    return this.request(`/orgs/${slug}`);
+  }
+
+  async createOrganization(data: CreateOrganizationRequest): Promise<OrganizationResponse> {
+    return this.request('/orgs', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateOrganization(
+    slug: string,
+    data: Partial<Pick<OrganizationResponse, 'name' | 'billing_email'>>
+  ): Promise<OrganizationResponse> {
+    return this.request(`/orgs/${slug}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteOrganization(slug: string): Promise<void> {
+    return this.request(`/orgs/${slug}`, { method: 'DELETE' });
+  }
+
+  async getOrganizationMembers(slug: string): Promise<MembershipResponse[]> {
+    return this.request(`/orgs/${slug}/members`);
+  }
+
+  async inviteMember(slug: string, data: InviteMemberRequest): Promise<InvitationResponse> {
+    return this.request(`/orgs/${slug}/members`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async removeMember(slug: string, memberId: string): Promise<void> {
+    return this.request(`/orgs/${slug}/members/${memberId}`, { method: 'DELETE' });
+  }
+
+  async getOrganizationInvitations(slug: string): Promise<InvitationResponse[]> {
+    return this.request(`/orgs/${slug}/invitations`);
+  }
+
+  async acceptInvitation(token: string): Promise<MembershipResponse> {
+    return this.request(`/orgs/invitations/${token}/accept`, { method: 'POST' });
+  }
+
+  async declineInvitation(token: string): Promise<void> {
+    return this.request(`/orgs/invitations/${token}/decline`, { method: 'POST' });
+  }
+
+  // ==========================================================================
+  // Billing
+  // ==========================================================================
+
+  async getCreditPacks(): Promise<CreditPackResponse[]> {
+    return this.request('/billing/packs');
+  }
+
+  async getBillingAccount(): Promise<BillingAccountResponse> {
+    return this.request('/billing/account');
+  }
+
+  async purchaseCredits(
+    packIndex: number,
+    successUrl: string,
+    cancelUrl: string
+  ): Promise<CheckoutResponse> {
+    return this.request('/billing/credits/purchase', {
+      method: 'POST',
+      body: JSON.stringify({
+        credit_pack_index: packIndex,
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+      }),
+    });
+  }
+
+  async getTransactions(limit = 50, offset = 0): Promise<TransactionResponse[]> {
+    return this.request(`/billing/transactions?limit=${limit}&offset=${offset}`);
+  }
+
+  async getUsageSummary(days = 30): Promise<UsageSummaryResponse> {
+    return this.request(`/billing/usage/summary?days=${days}`);
   }
 }
 

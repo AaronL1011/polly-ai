@@ -2,13 +2,13 @@
 
 from typing import Any
 
-from polly_pipeline_server.domain.agents.ports import (
+from democrata_server.domain.agents.ports import (
     DataExtractor,
     QueryPlanner,
     ResponseComposer,
     ResponseVerifier,
 )
-from polly_pipeline_server.domain.rag.ports import ContextRetriever
+from democrata_server.domain.rag.ports import ContextRetriever
 
 from .config import AgentConfig
 from .composer import LLMResponseComposer
